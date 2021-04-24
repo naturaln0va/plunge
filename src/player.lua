@@ -5,7 +5,8 @@ function Player:new(x, y)
   self.y = y
   self.hsp = 0
   self.vsp = 0
-  self.dir = 1
+  self.hdir = 1
+  self.vdir = 1
   self.angle = 0
   self.standImage = love.graphics.newImage('res/diver-stand.png')
 
@@ -21,18 +22,42 @@ end
 function Player:update(dt, input)
   if input.hPressed then
     if input.rightPressed then
-      self.dir = -1
+      self.hdir = -1
     elseif input.leftPressed then
-      self.dir = 1
+      self.hdir = 1
     end
 
-    self.hsp = self.hsp + (-self.dir * self.accel)
+    self.hsp = self.hsp + (-self.hdir * self.accel)
     self.hsp = clamp(self.hsp, 1, -1)
   else
     self.hsp = approach(self.hsp, 0, self.accel)
   end
 
   self.x = self.x + (self.hsp * self.speed)
+
+  if self.inBoat and (input.jumpPressed or input.upPressed) then
+    self.inBoat = false
+    -- dive out, and restrict vertical movement. still stear as diving
+  end
+
+  if self.inBoat then
+    return
+  end
+
+  if input.vPressed then
+    if input.upPressed then
+      self.vdir = 1
+    elseif input.downPressed then
+      self.vdir = -1
+    end
+
+    self.vsp = self.vsp + (-self.vdir * self.accel)
+    self.vsp = clamp(self.vsp, 1, -1)
+  else
+    self.vsp = approach(self.vsp, 0, self.accel)
+  end
+
+  self.y = self.y + (self.vsp * self.speed)
 end
 
 function Player:draw()
@@ -43,8 +68,8 @@ function Player:draw()
     self.x,
     self.y,
     self.angle,
-    self.dir,
-    1,
+    self.hdir,
+    self.vdir,
     imageToDraw:getWidth() / 2,
     imageToDraw:getHeight()
   )
