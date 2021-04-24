@@ -1,6 +1,6 @@
 
 function love.conf(t)
-    t.window.title = 'LD48'
+    t.window.title = 'Plunge'
   
     t.window.width = 860
     t.window.height = 480
