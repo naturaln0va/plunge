@@ -38,8 +38,8 @@ function Input:update(dt)
     self.downPressed = true
   end
 
-  self.hNormal = boolToNumber(self.rightPressed) - boolToNumber(self.leftPressed)
-  self.vNormal = boolToNumber(self.upPressed) - boolToNumber(self.downPressed)
+  self.hNormal = BoolToNumber(self.rightPressed) - BoolToNumber(self.leftPressed)
+  self.vNormal = BoolToNumber(self.upPressed) - BoolToNumber(self.downPressed)
 
   self.jumpPressed = love.keyboard.isDown('space')
   self.hPressed = self.leftPressed or self.rightPressed

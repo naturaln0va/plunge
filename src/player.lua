@@ -15,6 +15,9 @@ function Player:new(x, y)
   self.boatSpeed = 5
   self.boatAccel = 0.025
 
+  self.swimSpeed = 7
+  self.swimAccel = 0.07
+
   self.speed = self.boatSpeed
   self.accel = self.boatAccel
 end
@@ -28,15 +31,17 @@ function Player:update(dt, input)
     end
 
     self.hsp = self.hsp + (-self.hdir * self.accel)
-    self.hsp = clamp(self.hsp, 1, -1)
+    self.hsp = Clamp(self.hsp, 1, -1)
   else
-    self.hsp = approach(self.hsp, 0, self.accel)
+    self.hsp = Approach(self.hsp, 0, self.accel)
   end
 
   self.x = self.x + (self.hsp * self.speed)
 
   if self.inBoat and (input.jumpPressed or input.upPressed) then
     self.inBoat = false
+    self.speed = self.swimSpeed
+    self.accel = self.swimAccel
     -- dive out, and restrict vertical movement. still stear as diving
   end
 
@@ -52,9 +57,9 @@ function Player:update(dt, input)
     end
 
     self.vsp = self.vsp + (-self.vdir * self.accel)
-    self.vsp = clamp(self.vsp, 1, -1)
+    self.vsp = Clamp(self.vsp, 1, -1)
   else
-    self.vsp = approach(self.vsp, 0, self.accel)
+    self.vsp = Approach(self.vsp, 0, self.accel)
   end
 
   self.y = self.y + (self.vsp * self.speed)
