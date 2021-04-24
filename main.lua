@@ -8,7 +8,8 @@ function love.load()
 
   debugFont = love.graphics.newFont('res/express-mono.ttf', 18)
 
-  love.graphics.setBackgroundColor(1, 0, 1, 1)
+  love.graphics.setDefaultFilter("nearest", "nearest")
+  love.graphics.setBackgroundColor(178 / 255, 234 / 255, 1, 1)
 end
 
 function love.update(dt)
@@ -30,10 +31,19 @@ end
 function love.draw()
   if DEBUG then
     love.graphics.setFont(debugFont)
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(table.concat({
+    debugMessage = table.concat({
       'paused: ' .. tostring(PAUSE),
       'fps: ' .. love.timer.getFPS()
-    }, '\n'), 20, 20)
+    }, '\n')
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.rectangle(
+      'fill', 
+      10, 
+      10, 
+      debugFont:getWidth(debugMessage) + 20, 
+      (debugFont:getHeight(debugMessage) * 2) + 20
+    )
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(debugMessage, 20, 20)
   end
 end
